@@ -1,0 +1,7 @@
+Pro spuštění je nutné mít nainstalované následující knihovny:
+  - numpy
+  - scipy
+  - matplotlib
+
+Pro analyzování konkrétní nahrávky, zadejte název souboru do proměnné
+'file' na začátku sktriptu

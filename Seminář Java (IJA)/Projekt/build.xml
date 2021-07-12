@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ija-project" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <property name="skip.tests" value="true"/>
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.klib"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.ane"/>
+    <include name="*.zip"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.json-20190722.classpath">
+    <pathelement location="${basedir}/lib/json-20190722.jar"/>
+    <pathelement location="$JAVA_HOME/lib/javafx-mx.jar"/>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module IJA-Project -->
+  
+  <dirname property="module.ija-project.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.ija-project" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="ija-project.output.dir" value="${module.ija-project.basedir}/build/IJA-Project"/>
+  <property name="ija-project.testoutput.dir" value="${module.ija-project.basedir}/build/test/IJA-Project"/>
+  
+  <path id="ija-project.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ija-project.module.production.classpath">
+    <path refid="library.json-20190722.classpath"/>
+  </path>
+  
+  <path id="ija-project.runtime.production.module.classpath">
+    <pathelement location="${ija-project.output.dir}"/>
+    <path refid="library.json-20190722.classpath"/>
+  </path>
+  
+  <path id="ija-project.module.classpath">
+    <pathelement location="${ija-project.output.dir}"/>
+    <path refid="library.json-20190722.classpath"/>
+  </path>
+  
+  <path id="ija-project.runtime.module.classpath">
+    <pathelement location="${ija-project.testoutput.dir}"/>
+    <pathelement location="${ija-project.output.dir}"/>
+    <path refid="library.json-20190722.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ija-project">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ija-project">
+    <patternset refid="excluded.from.module.ija-project"/>
+  </patternset>
+  
+  <path id="ija-project.module.sourcepath">
+    <dirset dir="${module.ija-project.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ija-project" depends="compile.module.ija-project.production,compile.module.ija-project.tests" description="Compile module IJA-Project"/>
+  
+  <target name="compile.module.ija-project.production" description="Compile module IJA-Project; production classes">
+    <mkdir dir="${ija-project.output.dir}"/>
+    <javac destdir="${ija-project.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.ija-project}"/>
+      <bootclasspath refid="ija-project.module.bootclasspath"/>
+      <classpath refid="ija-project.module.production.classpath"/>
+      <src refid="ija-project.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ija-project"/>
+    </javac>
+    
+    <copy todir="${ija-project.output.dir}">
+      <fileset dir="${module.ija-project.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+
+    <jar destfile="dest/ija-app.jar" basedir="${basedir}/build/IJA-Project">
+       <zipgroupfileset dir="${basedir}/lib" includes="*.jar"/>
+       <manifest>
+         <attribute name="Main-Class"
+                 value="controls.Main"/>
+       </manifest>
+    </jar>
+
+  </target>
+  
+  <target name="compile.module.ija-project.tests" depends="compile.module.ija-project.production" description="compile module IJA-Project; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ija-project" description="cleanup module">
+    <delete dir="${ija-project.output.dir}"/>
+    <delete dir="${ija-project.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.ija-project" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.ija-project" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+
+  <target name="compile" depends="build.modules" description="compile all"/>
+
+  <!-- Run program -->
+  <target name="run">
+      <java jar="${basedir}/dest/ija-app.jar" fork="true"/>
+  </target>
+
+  <!-- Create program documentation -->
+  <target name="javadoc">
+      <delete includeemptydirs="true">
+          <fileset dir="${basedir}/doc" includes="**/*"/>
+      </delete>
+      <javadoc sourcepath="${basedir}/src" destdir="${basedir}/doc" Private="true"/>
+  </target>
+
+</project>

@@ -1,0 +1,580 @@
+{
+    "lines": [
+        {
+            "lineNumber": "112",
+            "route": [
+                {
+                    "streetName": "Ponavska",
+                    "stops": [ "Ponavska 1" ]
+                },
+                {
+                    "streetName": "Zborilova",
+                    "stops": [ "Zborilova 1" ]
+                },
+                {
+                    "streetName": "Sladka",
+                    "stops": [ "Sladka 1", "Sladka 2" ]
+                },
+                {
+                    "streetName": "Dobrovska",
+                    "stops": [ "Dobrovska 1" ]
+                },
+                {
+                    "streetName": "Delsi",
+                    "stops": []
+                },
+                {
+                    "streetName": "Dlouha",
+                    "stops": [ "Dlouha 1" ]
+                },
+                {
+                    "streetName": "Houkalska",
+                    "stops": []
+                },
+                {
+                    "streetName": "Sumavska",
+                    "stops": [ "Sumavska 1" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 6687,
+                    "deploy": "00:00:00"
+                },
+                {
+                    "id": 4567,
+                    "deploy": "00:20:00"
+                },
+                {
+                    "id": 4678,
+                    "deploy": "00:40:00"
+                },
+                {
+                    "id": 9974,
+                    "deploy": "01:01:00"
+                },
+                {
+                    "id": 9975,
+                    "deploy": "01:20:00"
+                }
+            ]
+        },
+	{
+            "lineNumber": "99",
+            "route": [
+                {
+                    "streetName": "Testovaci",
+                    "stops": [ "Test 1", "Test 2", "Test 3","Test 4" ]
+                }   
+            ],
+            "vehicles": [
+                {
+                    "id": 6641,
+                    "deploy": "00:00:00"
+                },
+                {
+                    "id": 7714,
+                    "deploy": "00:11:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "84",
+            "route": [
+                {
+                    "streetName": "Dlouha",
+                    "stops": [ "Dlouha 1" ]
+                },
+                {
+                    "streetName": "Delsi",
+                    "stops": []
+                },
+                {
+                    "streetName": "Jeste delsi",
+                    "stops": []
+                },
+                {
+                    "streetName": "Nejdelsi",
+                    "stops": ["Nejdelsi 1"]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 102,
+                    "deploy": "00:00:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "71",
+            "route": [
+                {
+                    "streetName": "str2",
+                    "stops": [ "stop5" ]
+                },
+                {
+                    "streetName": "Zacpana",
+                    "stops": [ "Zacpana 1" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 1023,
+                    "deploy": "00:00:00"
+                },
+                {
+                    "id": 4411,
+                    "deploy": "00:02:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "15",
+            "route": [
+                {
+                    "streetName": "Odevzdalova",
+                    "stops": [ "Odevzdalova 1" ]
+                },
+                {
+                    "streetName": "Zacpana",
+                    "stops": [ "Zacpana 1" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 1023,
+                    "deploy": "00:11:30"
+                },
+                {
+                    "id": 4411,
+                    "deploy": "00:00:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "10",
+            "route": [
+                {
+                    "streetName": "str1",
+                    "stops": [ "stop1", "stop3" ]
+                },
+                {
+                    "streetName": "str2",
+                    "stops": [ "stop4" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 1023,
+                    "deploy": "00:00:00"
+                },
+                {
+                    "id": 4411,
+                    "deploy": "01:00:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "69",
+            "route": [
+                {
+                    "streetName": "Palackeho nam.",
+                    "stops": [ "Palackeho nam. 1", "Palackeho nam. 2" ]
+                },
+                {
+                    "streetName": "Metelkova",
+                    "stops": [ "Metelkova 1" ]
+                },
+                {
+                    "streetName": "str2",
+                    "stops": [ "stop4" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 1023,
+                    "deploy": "00:05:00"
+                },
+                {
+                    "id": 4411,
+                    "deploy": "00:00:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "8",
+            "route": [
+                {
+                    "streetName": "str2",
+                    "stops": [ "stop4" ]
+                },
+                {
+                    "streetName": "Kounicova",
+                    "stops": [ "Kounicova 1", "Kounicova 2" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 1023,
+                    "deploy": "00:00:00"
+                },
+                {
+                    "id": 4411,
+                    "deploy": "00:02:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "12",
+            "route": [
+                {
+                    "streetName": "str1",
+                    "stops": [ "stop2" ]
+                },
+                {
+                    "streetName": "str2",
+                    "stops": [ "stop4" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 6641,
+                    "deploy": "00:30:50"
+                },
+                {
+                    "id": 7714,
+                    "deploy": "00:00:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "54",
+            "route": [
+                {
+                    "streetName": "Odevzdalova",
+                    "stops": [ "Odevzdalova 1" ]
+                },
+                {
+                    "streetName": "Prazdna",
+                    "stops": []
+                },
+                {
+                    "streetName": "Branska",
+                    "stops": [ "Branska 1" ]
+                }
+
+            ],
+            "vehicles": [
+                {
+                    "id": 6641,
+                    "deploy": "00:10:10"
+                },
+                {
+                    "id": 7714,
+                    "deploy": "00:00:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "312",
+            "route": [
+                {
+                    "streetName": "Kounicova",
+                    "stops": [ "Kounicova 2" ]
+                },
+                {
+                    "streetName": "str2",
+                    "stops": []
+                },
+                {
+                    "streetName": "Metelkova",
+                    "stops": []
+                },
+                {
+                    "streetName": "Palackeho nam.",
+                    "stops": [ "Palackeho nam. 1" ]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 1238,
+                    "deploy": "00:10:10"
+                },
+                {
+                    "id": 1239,
+                    "deploy": "00:00:00"
+                }
+            ]
+        }
+    ],
+    "streets": [
+{
+            "streetName": "Testovaci",
+            "begin": [ 200, 500 ],
+            "end": [ 600, 500 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Test 1",
+                    "coordinates": [ 200, 500 ]
+                },
+                {
+                    "stopName": "Test 2",
+                    "coordinates": [ 300, 500 ]
+                },
+                {
+                    "stopName": "Test 3",
+                    "coordinates": [ 450, 500 ]
+                },
+                {
+                    "stopName": "Test 4",
+                    "coordinates": [ 600, 500 ]
+                }
+            ]
+        },
+        {
+            "streetName": "str1",
+            "begin": [ 100, 50 ],
+            "end": [ 400, 50 ],
+            "congestion": 1,
+            "stops": [
+                {
+                    "stopName": "stop1",
+                    "coordinates": [ 150, 50 ]
+                },
+                {
+                    "stopName": "stop2",
+                    "coordinates": [ 250, 50 ]
+                },
+                {
+                    "stopName": "stop3",
+                    "coordinates": [ 350, 50 ]
+                }
+            ]
+        },
+        {
+            "streetName": "str2",
+            "begin": [ 400, 50 ],
+            "end": [ 400, 200 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "stop4",
+                    "coordinates": [ 400, 100 ]
+                },
+                {
+                    "stopName": "stop5",
+                    "coordinates": [ 400, 150 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Kounicova",
+            "begin": [ 400, 50 ],
+            "end": [ 700, 50 ],
+            "congestion": 2,
+            "stops": [
+                {
+                    "stopName": "Kounicova 1",
+                    "coordinates": [ 500, 50 ]
+                },
+                {
+                    "stopName": "Kounicova 2",
+                    "coordinates": [ 650, 50 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Metelkova",
+            "begin": [ 400, 200 ],
+            "end": [ 250, 200 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Metelkova 1",
+                    "coordinates": [ 300, 200 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Palackeho nam.",
+            "begin": [ 250, 200 ],
+            "end": [ 250, 400 ],
+            "congestion": 1,
+            "stops": [
+                {
+                    "stopName": "Palackeho nam. 1",
+                    "coordinates": [ 250, 320 ]
+                },
+                {
+                    "stopName": "Palackeho nam. 2",
+                    "coordinates": [ 250, 400 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Zacpana",
+            "begin": [ 400, 200 ],
+            "end": [ 550, 200 ],
+            "congestion": 2,
+            "stops": [
+                {
+                    "stopName": "Zacpana 1",
+                    "coordinates": [ 500, 200 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Odevzdalova",
+            "begin": [ 550, 200 ],
+            "end": [ 550, 400 ],
+            "congestion": 1,
+            "stops": [
+                {
+                    "stopName": "Odevzdalova 1",
+                    "coordinates": [ 550, 300 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Prazdna",
+            "begin": [ 550, 400 ],
+            "end": [ 400, 400 ],
+            "congestion": 2,
+            "stops": [
+            ]
+        },
+        {
+            "streetName": "Branska",
+            "begin": [ 400, 400 ],
+            "end": [ 400, 300 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Branska 1",
+                    "coordinates": [ 400, 350 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Dlouha",
+            "begin": [ 50, 450 ],
+            "end": [ 750, 450 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Dlouha 1",
+                    "coordinates": [ 350, 450 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Delsi",
+            "begin": [ 750, 450 ],
+            "end": [ 750, 10 ],
+            "congestion": 0,
+            "stops": []
+        },
+        {
+            "streetName": "Jeste delsi",
+            "begin": [ 750, 10 ],
+            "end": [ 50, 10 ],
+            "congestion": 0,
+            "stops": []
+        },
+        {
+            "streetName": "Nejdelsi",
+            "begin": [ 50, 10 ],
+            "end": [ 50, 450 ],
+            "congestion": 2,
+            "stops": [
+                {
+                    "stopName": "Nejdelsi 1",
+                    "coordinates": [ 50, 320 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Koukalova",
+            "begin": [ 600, 500 ],
+            "end": [ 750, 500 ],
+            "congestion": 1,
+            "stops": []
+        },
+        {
+            "streetName": "Ponavska",
+            "begin": [ 750, 500 ],
+            "end": [ 750, 450 ],
+            "congestion": 1,
+            "stops": [
+            {
+                "stopName": "Ponavska 1",
+                "coordinates": [ 750, 470 ]
+            }
+            ]
+        },
+        {
+            "streetName": "Sumavska",
+            "begin": [ 200, 500 ],
+            "end": [ 50, 500 ],
+            "congestion": 1,
+            "stops": [
+                {
+                    "stopName": "Sumavska 1",
+                    "coordinates": [ 150, 500 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Houkalska",
+            "begin": [ 50, 500 ],
+            "end": [ 50, 450 ],
+            "congestion": 1,
+            "stops": []
+        },
+        {
+            "streetName": "Zborilova",
+            "begin": [ 750, 500 ],
+            "end": [ 1000, 500 ],
+            "congestion": 1,
+            "stops": [
+            {
+                "stopName": "Zborilova 1",
+                "coordinates": [ 800, 500 ]
+            },
+            {
+                "stopName": "Zborilova 2",
+                "coordinates": [ 950, 500 ]
+            }
+            ]
+        },
+        {
+            "streetName": "Sladka",
+            "begin": [ 1000, 500 ],
+            "end": [ 1000, 10 ],
+            "congestion": 0,
+            "stops": [
+            {
+                "stopName": "Sladka 1",
+                "coordinates": [ 1000, 450 ]
+            },
+            {
+                "stopName": "Sladka 2",
+                "coordinates": [ 1000, 200 ]
+            }
+            ]
+        },
+        {
+            "streetName": "Dobrovska",
+            "begin": [ 750, 10 ],
+            "end": [ 1000, 10 ],
+            "congestion": 2,
+            "stops": [
+            {
+                "stopName": "Dobrovska 1",
+                "coordinates": [ 825, 10 ]
+            }
+            ]
+        }
+        ]
+}   

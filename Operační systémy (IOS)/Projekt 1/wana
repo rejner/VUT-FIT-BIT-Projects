@@ -1,0 +1,562 @@
+#!/bin/sh
+
+export POSIXLY_CORRECT=yes
+
+COMMAND="false"
+zip="false"
+export ip_check=" "
+
+#PŘÍKAZY
+LIST_IP="false"
+LIST_HOSTS="false"
+LIST_URI="false"
+HIST_IP="false"
+HIST_LOAD="false"
+
+#FILTRY
+URI="none"
+IP_ADR="none"
+A_DATE_TIME="none"
+B_DATE_TIME="none"
+export F_COUNTER=0
+
+FILTER1="none"
+FILTER2="none"
+FILTER3="none"
+FILTER4="none"
+
+
+#kontrola hrubého patternu IPv4 a IPv6 adres
+check_ip(){
+
+ if expr "$IP_ADR" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
+   ip_check="valid"
+    return 0
+
+ elif expr "$IP_ADR" : '[a-zA-Z0-9]*:[a-zA-Z0-9]*:[a-zA-Z0-9]*:[a-zA-Z0-9]*:[a-zA-Z0-9]*:[a-zA-Z0-9]*:[a-zA-Z0-9]*:[a-zA-Z0-9]*$' >/dev/null; then
+   ip_check="valid"
+   return 0
+
+ elif expr "$IP_ADR" : '.*::.*$' >/dev/null; then
+   ip_check="valid"
+   return 0
+
+ else
+
+   return 1
+
+ fi
+}
+
+filter_ip(){
+
+      awk '{print $0}' $1 | grep "$IP_ADR"
+}
+
+filter_uri(){
+
+      awk '{print $0}' $1 | grep "GET\|POST" | awk -v finduri="$URI" '$7==finduri {print $0}'
+}
+
+filter_b_date(){
+
+      awk -v DateBefore="`LC_ALL=de_UK.utf8 date -d "$B_DATE_TIME" +"[%d/%b/%Y:%H:%M:%S"`" '{
+         if ($4 < DateBefore)
+          print;
+         else
+            next;}' $1
+}
+
+filter_a_date(){
+
+      awk -v DateAfter="`LC_ALL=de_UK.utf8 date -d "$A_DATE_TIME" +"[%d/%b/%Y:%H:%M:%S"`" '{
+         if ($4 > DateAfter)
+          print;
+         else
+          next;}' $1
+}
+
+filter_a_b_date(){
+
+    awk -v DateBefore="`LC_ALL=de_UK.utf8 date -d "$B_DATE_TIME" +"[%d/%b/%Y:%H:%M:%S"`" -v DateAfter="`LC_ALL=de_UK.utf8 date -d "$A_DATE_TIME" +"[%d/%b/%Y:%H:%M:%S"`" '{
+       if ($4 > DateAfter && $4 < DateBefore)
+        print;
+       else
+         next;}' $1
+
+}
+
+command_log(){
+
+    #příkaz list-ip
+    if [ "$LIST_IP" = "true" ]; then
+
+        awk '{print $1}' $1 | sort | uniq
+    fi
+
+    #příkaz list-uri
+    if [ "$LIST_URI" = "true" ]; then
+
+        awk '{print $0}' $1 | grep "GET\|POST" | awk '{print $7}' | sort | uniq
+    fi
+
+    #příkaz list-hosts
+    if [ "$LIST_HOSTS" = "true" ]; then
+
+       awk '{print $0}' $1 | while read line;
+         do
+           tmp_ip=$(echo "$line" | awk '{print $1}')
+
+           host $tmp_ip >/dev/null
+           if [ $? = "0" ]; then
+             host $tmp_ip | awk '{print $5}'
+           else
+             echo "$tmp_ip"
+           fi
+         done | sort | uniq
+    fi
+
+    #příkaz hist-ip
+    if [ "$HIST_IP" = "true" ]; then
+
+         awk '
+         function hash_print(var){
+           num=0;
+           val="";
+           while(++num<=var){
+            val=val "#"};
+           return val
+         }
+       {
+         n[$1]++
+       }
+          END {
+            for(i in n){
+            print i,"("n[i]")"":", hash_print(n[i]);}
+          }' $1 | sort -n -k 3 -r
+fi
+
+    #příkaz hist-load
+    if [ "$HIST_LOAD" = "true" ]; then
+
+         awk '
+         function hash_print(var){
+           num=0;
+           val="";
+           while(++num<=var){
+            val=val "#"};
+           return val
+         }
+       {
+         n[substr($4,2,length($4)-6)]++
+       }
+          END {
+            for(i in n){
+            year=substr(i,8,length(i)-11)
+            month=substr(i,4,length(i)-12)
+
+            if(month == "Jan")
+              month_dec="01";
+            else if(month == "Feb")
+              month_dec="02";
+            else if(month == "Mar")
+              month_dec="03";
+            else if(month == "Apr")
+              month_dec="04";
+            else if(month == "May")
+              month_dec="05";
+            else if(month == "Jun")
+              month_dec="06";
+            else if(month == "Jul")
+              month_dec="07";
+            else if(month == "Aug")
+              month_dec="08";
+            else if(month == "Sep")
+              month_dec="09";
+            else if(month == "Oct")
+              month_dec="10";
+            else if(month == "Nov")
+              month_dec="11";
+            else if(month == "Dec")
+              month_dec="12";
+
+            day=substr(i,1,length(i)-13)
+            hour=substr(i,13,length(i)-5)
+            newdate=year "-" month_dec "-" day " " hour "00"
+            print newdate,"("n[i]")"":", hash_print(n[i]);}
+          }' $1 | sort
+    fi
+}
+
+#testuje argumenty spuštěné se skriptem a nastavuje příslušné proměnné
+while test $# -gt 0; do
+
+  case $1 in
+    #list-ip příkaz
+    "list-ip")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ "$LIST_IP" = "true" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+      LIST_IP="true"
+      COMMAND="true"
+      shift
+      ;;
+
+    #list-hosts příkaz
+    "list-hosts")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ "$LIST_HOSTS" = "true" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+      LIST_HOSTS="true"
+      COMMAND="true"
+      shift
+      ;;
+
+    #list-uri příkaz
+    "list-uri")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ "$LIST_URI" = "true" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        LIST_URI="true"
+        COMMAND="true"
+        shift
+        ;;
+
+    #after date filter
+    "-a")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ ! "$A_DATE_TIME" = "none" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        shift
+        A_DATE_TIME=$1
+        F_COUNTER=`expr $F_COUNTER + 1`
+
+        if [ $FILTER1 = "none" ]; then
+            FILTER1="filter_a_date"
+        elif [ $FILTER2 = "none" ] && [ ! $FILTER1 = "none" ]; then
+            FILTER2="filter_a_date"
+        elif [ $FILTER3 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ]; then
+          FILTER3="filter_a_date"
+        elif [ $FILTER4 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ] && [ ! $FILTER3 = "none" ]; then
+          FILTER4="filter_a_date"
+        fi
+
+        shift
+        ;;
+
+    #before date filter
+    "-b")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ ! "$B_DATE_TIME" = "none" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        shift
+        B_DATE_TIME=$1
+        F_COUNTER=`expr $F_COUNTER + 1`
+        shift
+
+        if [ $FILTER1 = "none" ]; then
+            FILTER1="filter_b_date"
+        elif [ $FILTER2 = "none" ] && [ ! $FILTER1 = "none" ]; then
+            FILTER2="filter_b_date"
+        elif [ $FILTER3 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ]; then
+          FILTER3="filter_b_date"
+        elif [ $FILTER4 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ] && [ ! $FILTER3 = "none" ]; then
+          FILTER4="filter_b_date"
+        fi
+
+        ;;
+
+    #-ip filtr
+    "-ip")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ ! "$IP_ADR" = "none" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        shift
+        IP_ADR="$1"
+
+        check_ip
+        if [ "$ip_check" = " " ]; then
+          echo "Špatně zadaný tvar IP adresy!"
+          exit 2
+        fi
+
+        F_COUNTER=`expr $F_COUNTER + 1`
+        shift
+
+
+        if [ $FILTER1 = "none" ]; then
+            FILTER1="filter_ip"
+        elif [ $FILTER2 = "none" ] && [ ! $FILTER1 = "none" ]; then
+            FILTER2="filter_ip"
+        elif [ $FILTER3 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ]; then
+          FILTER3="filter_ip"
+        elif [ $FILTER4 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ] && [ ! $FILTER3 = "none" ]; then
+          FILTER4="filter_ip"
+        fi
+
+        ;;
+
+    #-uri filtr
+    "-uri")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ ! "$URI" = "none" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        shift
+        URI="$1"
+        F_COUNTER=`expr $F_COUNTER + 1`
+        shift
+
+        if [ $FILTER1 = "none" ]; then
+            FILTER1="filter_uri"
+        elif [ $FILTER2 = "none" ] && [ ! $FILTER1 = "none" ]; then
+            FILTER2="filter_uri"
+        elif [ $FILTER3 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ]; then
+          FILTER3="filter_uri"
+        elif [ $FILTER4 = "none" ] && [ ! $FILTER1 = "none" ] && [ ! $FILTER2 = "none" ] && [ ! $FILTER3 = "none" ]; then
+          FILTER4="filter_uri"
+        fi
+
+        ;;
+
+    #hist-ip command
+    "hist-ip")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ "$HIST_IP" = "true" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        HIST_IP="true"
+        COMMAND="true"
+        shift
+        ;;
+
+    #-hist-load command
+    "hist-load")
+
+      #kontrola zadání stejného argumentu vícekrát
+      if [ "$HIST_LOAD" = "true" ]; then
+        echo "Nelze zadávat stejné příkazy vícekrát!"
+        exit 1
+      fi
+
+        HIST_LOAD="true"
+        COMMAND="true"
+        shift
+        ;;
+
+    #everything else
+    *)
+      if [ -f "$1" ]; then
+        break;
+      else
+        echo "Neznámý argument '$1'!"
+        exit 1
+        shift
+      fi
+      ;;
+
+  esac
+done
+
+#projde všechny zbylé argumenty, rozhodne které jsou logy a zapíše je do svých proměnných
+while [ -f "$1" ] || chyba="true"; do
+
+  #test jestli je soubor čitelný
+  if [ "$chyba" = "true" ]; then
+    if [ $# = "0" ]; then
+      #echo "Náčítání logů bylo dokončeno"
+      break
+    else
+      echo "Nelze otevřít soubor $1"
+      if [ $# = "0" ]; then
+        break
+      else
+        shift
+        continue
+      fi
+    fi
+  fi
+
+  #test jestli se jedná o .gz soubor a přiřazení logů do svých proměnných
+  if [ "$(echo "$1" | grep ".gz")" ]; then
+    zip="true"
+    log_files_gz="$log_files_gz $1"
+    shift
+  else
+    log_files="$log_files $1"
+    shift
+  fi
+
+done
+
+#jestliže je log_files prázdný, čte ze stdin
+if [ ! "$log_files" ] && [ ! "$log_files_gz" ]; then
+  echo "Nenalezeny žádné logy, čtu logy ze stdin:"
+
+  while read line; do
+    log_files="$line"
+    break
+  done
+
+fi
+
+#echo "Načítám $log_files"
+
+################# SOUBORY .GZ ########################
+if [ $zip = "true" ]; then
+
+  # zpracuje vstup pouze pomocí filtrů (nebyl zadán příkaz)
+  if [ ! $COMMAND = "true" ] && [ ! $F_COUNTER = "0" ]; then
+
+    if [ $F_COUNTER = "1" ]; then
+      { zcat $log_files_gz ; cat $log_files ; } | $FILTER1
+
+    elif [ $F_COUNTER = "2" ]; then
+      { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | $FILTER2
+
+    elif [ $F_COUNTER = "3" ]; then
+      { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | $FILTER2 | $FILTER3
+
+    elif [ $F_COUNTER = "4" ]; then
+      { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | $FILTER2 | $FILTER3 | $FILTER4
+
+    fi
+
+  # je zadán příkaz a zároveň filtr (nebo více filtrů)
+  elif [ $COMMAND = "true" ] && [ ! $F_COUNTER = "0" ]; then
+
+    if [ $F_COUNTER = "1" ]; then #zadán 1 filtr
+
+      if [ ! "$log_files" ]; then #kontroluje jestli jsou data v log_files
+        zcat $log_files_gz | $FILTER1 | command_log
+      else #když jsou data v obou proměnných, sloučí výstup a provede nad ním příslušné operace
+        { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | command_log
+      fi
+
+    elif [ $F_COUNTER = "2" ]; then #zadány 2 filtry
+
+      if [ ! "$log_files" ]; then
+        zcat $log_files_gz | $FILTER1 | $FILTER2 | command_log
+      else
+        { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | $FILTER2 | command_log
+      fi
+
+    elif [ $F_COUNTER = "3" ]; then #zadány 3 filtry
+
+      if [ ! "$log_files" ]; then
+        zcat $log_files_gz | $FILTER1 | $FILTER2 | $FILTER3 | command_log
+      else
+        { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | $FILTER2 | $FILTER3 | command_log
+      fi
+
+    elif [ $F_COUNTER = "4" ]; then #zadány 4 filtry
+
+      if [ ! "$log_files" ]; then
+        zcat $log_files_gz | $FILTER1 | $FILTER2 | $FILTER3 | $FILTER4 | command_log
+      else
+        { zcat $log_files_gz ; cat $log_files ; } | $FILTER1 | $FILTER2 | $FILTER3 | $FILTER4 | command_log
+      fi
+
+    fi
+
+  elif [ $COMMAND = "true" ] && [ $F_COUNTER = "0" ]; then #je zadán pouze příkaz
+
+    if [ ! "$log_files" ]; then
+      zcat $log_files_gz | command_log
+    else
+      { zcat $log_files_gz ; cat $log_files ; } | command_log
+    fi
+
+  else
+
+    if [ ! "$log_files" ]; then
+      zcat $log_files_gz
+    else
+      { zcat $log_files_gz ; cat $log_files ; }
+    fi
+  fi
+
+exit 0
+fi
+####################### KONEC SOUBORY .GZ ###########################
+
+
+#################### SOUBORY BEZ .GZ KONCOVKY #######################
+
+# nebyl zadán příkaz ani filtr -> vypíše celý obsah logů
+if [ ! $COMMAND = "true" ] && [ $F_COUNTER = "0" ]; then
+  if [ ! $zip = "true" ]; then
+    cat $log_files
+  else
+    zcat $log_files
+  fi
+fi
+
+# zpracuje vstup pouze pomocí filtrů (nebyl zadán příkaz)
+if [ ! $COMMAND = "true" ]; then
+
+  if [ $F_COUNTER = "1" ]; then
+    $FILTER1 "$log_files"
+
+  elif [ $F_COUNTER = "2" ]; then
+    $FILTER1 "$log_files" | $FILTER2
+
+  elif [ $F_COUNTER = "3" ]; then
+    $FILTER1 "$log_files" | $FILTER2 | $FILTER3
+
+  elif [ $F_COUNTER = "4" ]; then
+    $FILTER1 "$log_files" | $FILTER2 | $FILTER3 | $FILTER4
+
+  fi
+
+# je zadán příkaz a zároveň filtr (nebo více filtrů)
+elif [ $COMMAND = "true" ] && [ ! $F_COUNTER = "0" ]; then
+
+  if [ $F_COUNTER = "1" ]; then
+    $FILTER1 "$log_files" | command_log
+
+  elif [ $F_COUNTER = "2" ]; then
+    $FILTER1 "$log_files" | $FILTER2 | command_log
+
+  elif [ $F_COUNTER = "3" ]; then
+    $FILTER1 "$log_files" | $FILTER2 | $FILTER3 | command_log
+
+  elif [ $F_COUNTER = "4" ]; then
+    $FILTER1 "$log_files" | $FILTER2 | $FILTER3 | $FILTER4 | command_log
+  fi
+
+else #je zadán pouze příkaz
+  command_log "$log_files"
+fi
+
+exit 0

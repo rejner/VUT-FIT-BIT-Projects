@@ -1,0 +1,147 @@
+{
+    "streets": [
+        {
+            "streetName": "Dlouha",
+            "begin": [ 50, 450 ],
+            "end": [ 750, 450 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Dlouha 1",
+                    "coordinates": [ 350, 450 ]
+                },
+                {
+                    "stopName": "Dlouha 2",
+                    "coordinates": [ 500, 450 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Delsi",
+            "begin": [ 750, 450 ],
+            "end": [ 750, 20 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Delsi 1",
+                    "coordinates": [ 750, 200 ]
+                }
+            ]
+        },
+        {
+            "streetName": "Jeste delsi",
+            "begin": [ 750, 20 ],
+            "end": [ 50, 20 ],
+            "congestion": 0,
+            "stops": []
+        },
+        {
+            "streetName": "Nejdelsi",
+            "begin": [ 50, 20 ],
+            "end": [ 50, 450 ],
+            "congestion": 0,
+            "stops": [
+                {
+                    "stopName": "Nejdelsi 1",
+                    "coordinates": [ 50, 320 ]
+                }
+            ]
+        }
+    ],
+    "lines": [
+        {
+            "lineNumber": "84",
+            "route": [
+                {
+                    "streetName": "Dlouha",
+                    "stops": [ "Dlouha 1", "Dlouha 2" ]
+                },
+                {
+                    "streetName": "Delsi",
+                    "stops": [ "Delsi 1" ]
+                },
+                {
+                    "streetName": "Jeste delsi",
+                    "stops": []
+                },
+                {
+                    "streetName": "Nejdelsi",
+                    "stops": ["Nejdelsi 1"]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 102,
+                    "deploy": "00:00:00"
+                },
+                {
+                    "id": 103,
+                    "deploy": "00:07:00"
+                },
+                {
+                    "id": 103,
+                    "deploy": "00:14:00"
+                },
+                {
+                    "id": 104,
+                    "deploy": "00:30:00"
+                },
+                {
+                    "id": 105,
+                    "deploy": "00:33:00"
+                },
+                {
+                    "id": 106,
+                    "deploy": "00:44:00"
+                }
+            ]
+        },
+        {
+            "lineNumber": "44",
+            "route": [
+                {
+                    "streetName": "Dlouha",
+                    "stops": [ "Dlouha 2" ]
+                },
+                {
+                    "streetName": "Delsi",
+                    "stops": []
+                },
+                {
+                    "streetName": "Jeste delsi",
+                    "stops": []
+                },
+                {
+                    "streetName": "Nejdelsi",
+                    "stops": ["Nejdelsi 1"]
+                }
+            ],
+            "vehicles": [
+                {
+                    "id": 107,
+                    "deploy": "00:05:00"
+                },
+                {
+                    "id": 108,
+                    "deploy": "00:15:00"
+                },
+                {
+                    "id": 109,
+                    "deploy": "00:22:00"
+                },
+                {
+                    "id": 110,
+                    "deploy": "00:28:00"
+                },
+                {
+                    "id": 111,
+                    "deploy": "00:34:00"
+                },
+                {
+                    "id": 112,
+                    "deploy": "00:42:00"
+                }
+            ]
+        }
+    ]
+}   
